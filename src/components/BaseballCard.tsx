@@ -5,9 +5,31 @@ interface BaseballCardProps {
   player: Player;
   isActive?: boolean;
   order: number;
+  isMini?: boolean;
 }
 
-export const BaseballCard: React.FC<BaseballCardProps> = ({ player, isActive, order }) => {
+export const BaseballCard: React.FC<BaseballCardProps> = ({ player, isActive, order, isMini }) => {
+  if (isMini) {
+    return (
+      <div className="relative w-16 h-24 bg-white border-2 border-slate-900 rounded-sm shadow-xl flex items-center justify-center overflow-hidden">
+        {player.imageUrl ? (
+          <img 
+            src={player.imageUrl} 
+            alt={player.name} 
+            className="absolute inset-0 w-full h-full object-cover grayscale-[0.2]"
+            onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/150/000000/FFFFFF?text=' + player.name[0] }}
+          />
+        ) : (
+          <span className="text-xl font-black text-slate-700">{player.name[0]}</span>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+        <div className="absolute bottom-1 left-0 right-0 text-center">
+            <span className="text-[8px] font-bold text-white uppercase truncate block px-1">{player.name.split(' ').pop()}</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div 
       className={`relative w-44 h-64 rounded-none transition-all duration-300 transform shadow-[8px_8px_0_0_rgba(0,0,0,0.5)] flex-shrink-0

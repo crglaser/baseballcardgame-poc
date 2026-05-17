@@ -19,35 +19,39 @@ function App() {
          }}></div>
 
          {/* The Diamond */}
-         <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#8b5a2b] rotate-45 border-[16px] border-[#7a4a1b] shadow-2xl opacity-80">
+         <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#8b5a2b] rotate-45 border-[16px] border-[#7a4a1b] shadow-2xl opacity-80">
             <div className="absolute inset-4 bg-[#2d5a27] border-4 border-white/20"></div>
          </div>
 
          {/* Base Markers & Occupant Cards */}
-         <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rotate-45 pointer-events-none">
+         <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none">
             {/* 2nd Base */}
-            <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 rotate-[-45deg] w-24 h-32">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-32 flex items-center justify-center -rotate-45">
                {gameState.bases[1] ? (
-                 <div className="scale-50 origin-center"><BaseballCard player={gameState.bases[1]} order={0} /></div>
+                 <div className="origin-center"><BaseballCard player={gameState.bases[1]} order={0} isMini /></div>
                ) : (
-                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm m-auto translate-x-6 translate-y-10" />
+                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm rotate-45" />
                )}
             </div>
             {/* 3rd Base */}
-            <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 rotate-[-45deg] w-24 h-32">
+            <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-24 h-32 flex items-center justify-center -rotate-45">
                {gameState.bases[2] ? (
-                 <div className="scale-50 origin-center"><BaseballCard player={gameState.bases[2]} order={0} /></div>
+                 <div className="origin-center"><BaseballCard player={gameState.bases[2]} order={0} isMini /></div>
                ) : (
-                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm m-auto -translate-x-6 translate-y-10" />
+                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm rotate-45" />
                )}
             </div>
             {/* 1st Base */}
-            <div className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 rotate-[-45deg] w-24 h-32">
+            <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-24 h-32 flex items-center justify-center -rotate-45">
                {gameState.bases[0] ? (
-                 <div className="scale-50 origin-center"><BaseballCard player={gameState.bases[0]} order={0} /></div>
+                 <div className="origin-center"><BaseballCard player={gameState.bases[0]} order={0} isMini /></div>
                ) : (
-                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm m-auto translate-x-6 -translate-y-10" />
+                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm rotate-45" />
                )}
+            </div>
+            {/* Home Plate */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-32 h-48 flex items-center justify-center">
+               <div className="w-12 h-12 bg-white/40 border-2 border-white/60 rounded-sm rotate-45" />
             </div>
          </div>
       </div>

@@ -19,12 +19,12 @@ function App() {
          }}></div>
 
          {/* The Diamond */}
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[#8b5a2b] rotate-45 border-[20px] border-[#7a4a1b] shadow-2xl opacity-80">
+         <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#8b5a2b] rotate-45 border-[16px] border-[#7a4a1b] shadow-2xl opacity-80">
             <div className="absolute inset-4 bg-[#2d5a27] border-4 border-white/20"></div>
          </div>
 
          {/* Base Markers & Occupant Cards */}
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rotate-45 pointer-events-none">
+         <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rotate-45 pointer-events-none">
             {/* 2nd Base */}
             <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 rotate-[-45deg] w-24 h-32">
                {gameState.bases[1] ? (

@@ -15,6 +15,7 @@ export interface Player {
   position: string;
   stats: PlayerStats;
   currentProbabilities: Record<PAOutcome, number>;
+  imageUrl?: string;
 }
 
 export interface Lineup {

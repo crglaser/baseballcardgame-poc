@@ -10,64 +10,59 @@ interface BaseballCardProps {
 export const BaseballCard: React.FC<BaseballCardProps> = ({ player, isActive, order }) => {
   return (
     <div 
-      className={`relative w-32 h-48 rounded-lg overflow-hidden border-2 transition-all duration-300 transform shadow-2xl flex-shrink-0
+      className={`relative w-44 h-64 rounded-none transition-all duration-300 transform shadow-[8px_8px_0_0_rgba(0,0,0,0.5)] flex-shrink-0
         ${isActive 
-          ? 'border-yellow-400 scale-110 -translate-y-6 z-10 shadow-[0_0_25px_rgba(250,204,21,0.6)] ring-4 ring-yellow-400/20' 
-          : 'border-slate-800 bg-slate-900 hover:border-slate-600 scale-100 translate-y-0 opacity-90'}`}
+          ? 'scale-110 -translate-y-8 z-50 ring-4 ring-yellow-400 shadow-[12px_12px_0_0_rgba(0,0,0,0.6)]' 
+          : 'scale-100 translate-y-0 opacity-100 hover:-translate-y-2'}`}
+      style={{
+        backgroundColor: isActive ? '#fef3c7' : '#e2e8f0',
+        imageRendering: 'pixelated'
+      }}
     >
-      {/* Card Visual / Image */}
-      <div className="absolute inset-0 z-0">
-        {player.imageUrl ? (
-          <img 
-            src={player.imageUrl} 
-            alt={player.name} 
-            className="w-full h-full object-cover grayscale-[0.2] brightness-90 group-hover:grayscale-0 group-hover:brightness-100 transition-all"
-          />
-        ) : (
-          <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-             <span className="text-4xl font-black text-slate-700">{player.name[0]}</span>
+      {/* 8-Bit Styled Border */}
+      <div className="absolute inset-1 border-2 border-slate-900 flex flex-col">
+        
+        {/* Card Header (8-Bit Style) */}
+        <div className="bg-slate-900 p-1 flex justify-between items-center">
+          <span className="text-[10px] font-mono font-bold text-white uppercase">{player.position}</span>
+          <span className="text-[10px] font-mono font-bold text-yellow-400">#{order}</span>
+        </div>
+
+        {/* Player Image / Sprite Placeholder */}
+        <div className="flex-1 relative bg-white border-b-2 border-slate-900 overflow-hidden flex items-center justify-center">
+          {player.imageUrl ? (
+            <img 
+              src={player.imageUrl} 
+              alt={player.name} 
+              className="w-full h-full object-cover grayscale-[0.2]"
+              onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/150/000000/FFFFFF?text=' + player.name[0] }}
+            />
+          ) : (
+            <div className="text-4xl font-black text-slate-200">{player.name[0]}</div>
+          )}
+          
+          {/* Scanline Effect */}
+          <div className="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"></div>
+        </div>
+
+        {/* Card Info */}
+        <div className="p-2 bg-white flex flex-col justify-between h-20">
+          <p className="text-[14px] font-mono font-black text-slate-900 uppercase leading-none truncate">
+            {player.name}
+          </p>
+          
+          <div className="grid grid-cols-2 gap-1 mt-1">
+             <div className="border border-slate-900 px-1 py-0.5 bg-slate-100">
+                <p className="text-[7px] font-mono font-bold text-slate-500 leading-none">AVG</p>
+                <p className="text-[10px] font-mono font-black text-slate-900 leading-none">.{player.stats.ba.toString().split('.')[1]}</p>
+             </div>
+             <div className="border border-slate-900 px-1 py-0.5 bg-slate-100">
+                <p className="text-[7px] font-mono font-bold text-slate-500 leading-none">HR%</p>
+                <p className="text-[10px] font-mono font-black text-slate-900 leading-none">{Math.round(player.stats.hrRate * 100)}</p>
+             </div>
           </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-      </div>
-
-      {/* Card Header Overlay */}
-      <div className="relative z-10 p-2 flex justify-between items-start">
-        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${isActive ? 'bg-yellow-400 text-slate-900' : 'bg-slate-900/80 text-white border border-white/20'}`}>
-          {order}
-        </div>
-        <div className="bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded border border-white/10">
-          <span className="text-[9px] font-black uppercase text-white tracking-widest">{player.position}</span>
         </div>
       </div>
-
-      {/* Card Name Overlay */}
-      <div className="absolute bottom-6 left-0 right-0 z-10 px-2 text-center">
-        <p className={`text-[12px] font-black uppercase tracking-tighter leading-tight drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] ${isActive ? 'text-yellow-400' : 'text-white'}`}>
-          {player.name}
-        </p>
-      </div>
-
-      {/* Card Stats Footer Overlay */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/60 backdrop-blur-md border-t border-white/10 p-1 grid grid-cols-3 gap-0.5 text-center">
-        <div>
-          <p className="text-[6px] font-bold text-slate-400 uppercase leading-none">AVG</p>
-          <p className="text-[10px] font-black text-white">.{player.stats.ba.toString().split('.')[1]}</p>
-        </div>
-        <div>
-          <p className="text-[6px] font-bold text-slate-400 uppercase leading-none">OBP</p>
-          <p className="text-[10px] font-black text-white">.{player.stats.obp.toString().split('.')[1]}</p>
-        </div>
-        <div>
-          <p className="text-[6px] font-bold text-slate-400 uppercase leading-none">HR%</p>
-          <p className="text-[10px] font-black text-white">{Math.round(player.stats.hrRate * 100)}</p>
-        </div>
-      </div>
-      
-      {/* Active Indicator Overlay */}
-      {isActive && (
-        <div className="absolute inset-0 border-4 border-yellow-400/50 animate-pulse pointer-events-none rounded-lg z-20"></div>
-      )}
     </div>
   );
 };

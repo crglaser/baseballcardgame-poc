@@ -2,134 +2,144 @@ import React from 'react';
 import { useGame } from './hooks/useGame';
 import { BaseballCard } from './components/BaseballCard';
 import { SpecialCard } from './components/SpecialCard';
-import { Play, Pause, RotateCcw, Activity, Zap, CreditCard } from 'lucide-react';
+import { Play, Pause, RotateCcw, Zap } from 'lucide-react';
 
 function App() {
   const { gameState, lineup, hand, energy, isPaused, togglePlay, startInning, playCard } = useGame();
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] text-slate-100 font-mono selection:bg-blue-500/30 overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-[#1a4a1a] text-slate-100 font-sans selection:bg-blue-500/30 overflow-hidden flex flex-col relative">
       
-      {/* 8-Bit Background */}
-      <div className="absolute inset-0 z-0 opacity-20 bg-[#2d5a27] [background-image:radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
+      {/* 1. THE FIELD BACKGROUND */}
+      <div className="absolute inset-0 z-0">
+         {/* Grass Texture */}
+         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/grass.png')]"></div>
+         <div className="absolute inset-0" style={{
+           backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(0,0,0,0.03) 60px, rgba(0,0,0,0.03) 120px)'
+         }}></div>
 
-      {/* Top Bar: Manager Cards (The "Jokers") */}
-      <header className="relative z-10 bg-slate-900 border-b-4 border-slate-800 p-4 shrink-0 shadow-2xl">
-        <div className="max-w-[1600px] mx-auto flex justify-between items-center gap-8">
-          
-          <div className="flex items-center gap-3 min-w-[200px]">
-            <div className="bg-blue-600 p-2 border-2 border-blue-400">
-              <Activity size={20} className="text-white" />
+         {/* The Diamond */}
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[#8b5a2b] rotate-45 border-[20px] border-[#7a4a1b] shadow-2xl opacity-80">
+            <div className="absolute inset-4 bg-[#2d5a27] border-4 border-white/20"></div>
+         </div>
+
+         {/* Base Markers & Occupant Cards */}
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rotate-45 pointer-events-none">
+            {/* 2nd Base */}
+            <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 rotate-[-45deg] w-24 h-32">
+               {gameState.bases[1] ? (
+                 <div className="scale-50 origin-center"><BaseballCard player={gameState.bases[1]} order={0} /></div>
+               ) : (
+                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm m-auto translate-x-6 translate-y-10" />
+               )}
             </div>
-            <h1 className="text-lg font-black italic text-white uppercase leading-none tracking-tighter">
-              Ballpark <span className="text-blue-500">Tycoon</span>
-            </h1>
-          </div>
+            {/* 3rd Base */}
+            <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 rotate-[-45deg] w-24 h-32">
+               {gameState.bases[2] ? (
+                 <div className="scale-50 origin-center"><BaseballCard player={gameState.bases[2]} order={0} /></div>
+               ) : (
+                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm m-auto -translate-x-6 translate-y-10" />
+               )}
+            </div>
+            {/* 1st Base */}
+            <div className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 rotate-[-45deg] w-24 h-32">
+               {gameState.bases[0] ? (
+                 <div className="scale-50 origin-center"><BaseballCard player={gameState.bases[0]} order={0} /></div>
+               ) : (
+                 <div className="w-12 h-12 bg-white/20 border-2 border-white/40 rounded-sm m-auto translate-x-6 -translate-y-10" />
+               )}
+            </div>
+         </div>
+      </div>
 
-          {/* Manager Cards */}
-          <div className="flex-1 flex justify-center items-center gap-4">
-             {hand.slice(0, 5).map(card => (
-               <div key={card.id} onClick={() => playCard(card)} className="cursor-pointer">
-                 <SpecialCard card={card} />
-               </div>
-             ))}
-             {hand.length === 0 && (
-               <button 
-                 onClick={startInning}
-                 className="px-6 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-black border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1 transition-all uppercase"
-               >
-                 Draw Hand (Start Inning)
-               </button>
-             )}
-          </div>
+      {/* 2. TOP HUD: Score & Energy */}
+      <header className="relative z-20 p-6 flex justify-between items-start">
+        <div className="bg-slate-900/90 backdrop-blur-xl border-b-4 border-blue-500 p-4 rounded-xl shadow-2xl flex gap-8">
+           <div className="text-center border-r border-slate-700 pr-8">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inning</p>
+              <p className="text-2xl font-black">{gameState.inning} {gameState.isTopInning ? 'TOP' : 'BOT'}</p>
+           </div>
+           <div className="text-center border-r border-slate-700 pr-8">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Score</p>
+              <p className="text-2xl font-black text-blue-400">{gameState.score.away} - {gameState.score.home}</p>
+           </div>
+           <div className="text-center">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Outs</p>
+              <div className="flex gap-2 mt-2">
+                 {[0, 1, 2].map(i => (
+                   <div key={i} className={`w-4 h-4 rounded-full border-2 border-slate-700 ${gameState.outs > i ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-slate-950'}`} />
+                 ))}
+              </div>
+           </div>
+        </div>
 
-          {/* Energy / Resource */}
-          <div className="flex items-center gap-2 bg-black px-4 py-2 border-2 border-slate-700">
-             <Zap size={20} className="text-yellow-400 fill-yellow-400" />
-             <span className="text-xl font-black text-white">{energy} / 3</span>
-          </div>
+        <div className="flex flex-col items-end gap-4">
+           <div className="bg-yellow-500 text-black px-6 py-2 rounded-full font-black flex items-center gap-2 shadow-2xl">
+              <Zap size={20} fill="black" />
+              ENERGY: {energy} / 3
+           </div>
+           <div className="flex gap-2">
+              <button onClick={togglePlay} className="p-4 bg-blue-600 rounded-full shadow-2xl text-white hover:bg-blue-500 active:scale-95 transition-all">
+                {isPaused ? <Play fill="white" /> : <Pause fill="white" />}
+              </button>
+              <button onClick={startInning} className="p-4 bg-slate-800 rounded-full shadow-2xl text-white hover:bg-slate-700 active:scale-95 transition-all">
+                <RotateCcw />
+              </button>
+           </div>
         </div>
       </header>
 
-      {/* Main Game: The Field Display */}
-      <main className="flex-1 relative flex flex-col items-center justify-center p-4 z-10">
+      {/* 3. CENTER: Action Feed */}
+      <div className="flex-1 flex flex-col items-center justify-center relative z-10 pointer-events-none">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 px-12 py-6 rounded-3xl shadow-2xl transform -translate-y-24">
+             <h2 className="text-5xl font-black italic uppercase tracking-tighter text-white drop-shadow-2xl">
+               {gameState.log[0]}
+             </h2>
+          </div>
+      </div>
+
+      {/* 4. PRIMARY FOCUS: THE LINEUP (Like Balatro Hand) */}
+      <footer className="relative z-30 flex flex-col items-center pb-8 pt-20 bg-gradient-to-t from-black via-black/80 to-transparent">
         
-        {/* 8-Bit Scorebug */}
-        <div className="bg-slate-900 border-4 border-slate-700 p-4 min-w-[400px] shadow-[8px_8px_0_0_rgba(0,0,0,0.5)]">
-           <div className="flex justify-between items-center mb-4 border-b-2 border-slate-700 pb-2">
-              <div className="text-left">
-                <p className="text-[10px] text-slate-500 font-bold uppercase">Visiting Team</p>
-                <p className="text-2xl font-black text-blue-400">AWAY {gameState.score.away}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-[10px] text-slate-500 font-bold uppercase">Home Team</p>
-                <p className="text-2xl font-black text-white">HOME {gameState.score.home}</p>
-              </div>
-           </div>
-           
-           <div className="flex justify-between items-center gap-8">
-              <div className="flex gap-4">
-                <div>
-                   <p className="text-[10px] text-slate-500 font-bold uppercase">Inning</p>
-                   <p className="text-xl font-black text-white">{gameState.inning} {gameState.isTopInning ? '▲' : '▼'}</p>
-                </div>
-                <div>
-                   <p className="text-[10px] text-slate-500 font-bold uppercase">Outs</p>
-                   <div className="flex gap-1.5 mt-1">
-                      {[0, 1].map(i => (
-                        <div key={i} className={`w-3 h-3 border-2 border-slate-600 ${gameState.outs > i ? 'bg-red-500' : 'bg-slate-800'}`} />
-                      ))}
-                   </div>
-                </div>
-              </div>
-
-              {/* Diamond Minimalist */}
-              <div className="relative w-12 h-12 rotate-45 border-2 border-slate-700 bg-slate-800">
-                 <div className={`absolute top-0 left-0 w-4 h-4 border border-slate-600 ${gameState.bases[1] ? 'bg-yellow-400' : ''}`} />
-                 <div className={`absolute top-0 right-0 w-4 h-4 border border-slate-600 ${gameState.bases[2] ? 'bg-yellow-400' : ''}`} />
-                 <div className={`absolute bottom-0 left-0 w-4 h-4 border border-slate-600 ${gameState.bases[0] ? 'bg-yellow-400' : ''}`} />
-              </div>
-           </div>
-        </div>
-
-        {/* Action Overlay */}
-        <div className="mt-12 bg-white text-black px-12 py-4 border-b-8 border-slate-300 shadow-xl">
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Outcome</p>
-           <h2 className="text-3xl font-black italic uppercase text-center">{gameState.log[0]}</h2>
-        </div>
-
-        {/* Controls */}
-        <div className="mt-8 flex gap-4">
-            <button 
-              onClick={togglePlay}
-              className={`px-8 py-4 border-b-4 font-black uppercase flex items-center gap-2 ${isPaused ? 'bg-blue-600 border-blue-800 text-white' : 'bg-red-600 border-red-800 text-white'}`}
-            >
-              {isPaused ? <Play size={20} fill="currentColor" /> : <Pause size={20} fill="currentColor" />}
-              {isPaused ? 'Resume' : 'Pause'}
-            </button>
-        </div>
-      </main>
-
-      {/* Lineup focus: The Batting Order "Hand" */}
-      <footer className="relative z-20 h-80 bg-slate-900 border-t-4 border-slate-800 pt-8 overflow-hidden">
-        <div className="max-w-[1600px] mx-auto px-8 flex flex-col items-center">
-           <div className="flex items-center gap-2 mb-4 bg-black/40 px-4 py-1 rounded-full border border-white/10">
-              <CreditCard size={14} className="text-blue-400" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Current Batting Order</span>
-           </div>
-           
-           <div className="flex gap-4 overflow-x-auto w-full pb-8 justify-center no-scrollbar">
-              {lineup.players.map((player, idx) => (
+        {/* The 9-Man Lineup Row */}
+        <div className="mb-12 flex justify-center items-center gap-1 max-w-full overflow-visible px-10">
+           {lineup.players.map((player, idx) => (
+             <div 
+               key={player.id}
+               className={`transition-all duration-500 ${idx === gameState.currentBatterIndex && !isPaused ? '-translate-y-12 scale-110' : 'translate-y-0 opacity-80'}`}
+             >
                 <BaseballCard 
-                  key={player.id} 
                   player={player} 
-                  order={idx + 1}
-                  isActive={idx === gameState.currentBatterIndex && !isPaused}
+                  order={idx + 1} 
+                  isActive={idx === gameState.currentBatterIndex && !isPaused} 
                 />
-              ))}
-           </div>
+             </div>
+           ))}
+        </div>
+
+        {/* The Playable Action Cards (Under the lineup) */}
+        <div className="flex justify-center items-center gap-4">
+           <div className="text-[10px] font-black text-slate-500 uppercase vertical-text tracking-[0.5em] mr-4">Action Hand</div>
+           {hand.map(card => (
+             <div 
+               key={card.id} 
+               onClick={() => playCard(card)}
+               className="cursor-pointer transform hover:-translate-y-6 hover:rotate-3 transition-all active:scale-90"
+             >
+               <SpecialCard card={card} />
+             </div>
+           ))}
+           {hand.length === 0 && (
+             <div className="text-slate-600 font-black uppercase text-sm border-2 border-dashed border-slate-800 px-12 py-8 rounded-2xl">
+               End of Turn / Draw Hand
+             </div>
+           )}
         </div>
       </footer>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .vertical-text { writing-mode: vertical-lr; transform: rotate(180deg); }
+      `}} />
     </div>
   );
 }
